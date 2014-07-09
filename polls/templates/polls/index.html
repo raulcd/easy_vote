@@ -3,6 +3,6 @@
 
 <form action="{% url 'polls:create_poll' %}" method="post">
 {% csrf_token %}
-    <input type="text" name="question_text" id="question_text" value="Enter question here" />
+    <input type="text" name="question_text" id="question_text" placeholder="Enter question here" />
 <input type="submit" value="Create Question" />
 </form>
