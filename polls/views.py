@@ -2,12 +2,21 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views import generic
+from django.utils import timezone
 
 from polls.models import Question, Choice
 
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+
+    def get_queryset(self):
+        pass
+
+
+class LastQuestionView(generic.ListView):
+    template_name = 'polls/question_list.html'
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
@@ -42,3 +51,18 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
+
+
+def index(request):
+    return render(request, 'polls/index.html')
+
+
+def create_poll(request):
+    if not request.POST:
+        # TODO Generate 404
+        pass
+    else:
+        q = Question(question_text=request.POST['question_text'],
+                     pub_date=timezone.now())
+        q.save()
+        return HttpResponse("this is the create poll page")
