@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views import generic
@@ -59,10 +59,14 @@ def index(request):
 
 def create_poll(request):
     if not request.POST:
-        # TODO Generate 404
-        pass
+        raise Http404
     else:
-        q = Question(question_text=request.POST['question_text'],
-                     pub_date=timezone.now())
-        q.save()
-        return HttpResponse("this is the create poll page")
+        if request.POST['question_text']:
+            q = Question(question_text=request.POST['question_text'],
+                         pub_date=timezone.now())
+            q.save()
+            return HttpResponse("this is the create poll page")
+        else:
+            return render(request, 'polls/index.html', {
+                'error_message': "The question cannot be empty.",
+                })
