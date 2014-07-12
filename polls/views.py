@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
@@ -65,8 +65,29 @@ def create_poll(request):
             q = Question(question_text=request.POST['question_text'],
                          pub_date=timezone.now())
             q.save()
-            return HttpResponse("this is the create poll page")
+            return HttpResponseRedirect(reverse('polls:create_choices',
+                                                args=(q.id,)))
         else:
-            return render(request, 'polls/index.html', {
-                'error_message': "The question cannot be empty.",
+           return render(request, 'polls/index.html', {
+                'error_message': 'The question cannot be empty.',
                 })
+
+def create_choices(request, question_id):
+    if not request.POST:
+        q = get_object_or_404(Question, pk=question_id)
+        return render(request, 'polls/create_question.html',
+                      {'question': q})
+    else:
+        q = get_object_or_404(Question, pk=question_id)
+        if request.POST['answer_text_1'] and request.POST['answer_text_2']:
+            q.choice_set.create(choice_text=request.POST['answer_text_1'],
+                                votes=0)
+            q.choice_set.create(choice_text=request.POST['answer_text_2'],
+                                votes=0)
+            return HttpResponseRedirect(reverse('polls:last_question_view',))
+
+        else:
+            return render(request, 'polls/create_question.html',
+                          {'question': q,
+                           'error_message': 'At least two possible answers '
+                                            'are needed'})

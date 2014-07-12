@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+</br>
+                    </br>
+                        {% if question %}
+                        <h1>{{ question.question_text }}</h1>
+                        {% if error_message %}
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span aria-hidden="true">&times;</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                {{ error_message }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <form class="form-horizontal" role="form" action="{% url 'polls:create_choices' question.id %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="col-sm-4 col-md-offset-4 input-group">
+                    <input class="form-control" type="text" name="answer_text_1" id="answer_text_1" placeholder="Enter new answer" />
+                    </div>
+                    <div class="col-sm-4 col-md-offset-4 input-group">
+                    <input class="form-control" type="text" name="answer_text_2" id="answer_text_2" placeholder="Enter new answer" />
+                    <span class="input-group-btn">
+        <button class="btn btn-default" type="button">+</button>
+      </span>
+                </div>
+                                                       </div>
+                <input class="btn btn-lg btn-default" type="submit" value="Add possible answers" />
+            </form>
+
+                        {% endif %}
+                        
+{% endblock %}
+
