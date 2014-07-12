@@ -1,14 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<a href=" {% url 'polls:last_question_view' %} ">List of questions</a>
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<form action="{% url 'polls:create_poll' %}" method="post">
-{% csrf_token %}
-    <input type="text" name="question_text" id="question_text" placeholder="Enter question here" />
-<input type="submit" value="Create Question" />
-</form>
+</br>
+                    </br>
+                        {% if error_message %}
+                        <div class="alert alert-danger" role="alert">
+                        {{ error_message }}
+                        </div>
+                        {% endif %}
+        <form class="form-horizontal" role="form" action="{% url 'polls:create_poll' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <input class="form-control" type="text" name="question_text" id="question_text" placeholder="Enter new question" />
+                </div>
+            </div>
+            <input class="btn btn-lg btn-default" type="submit" value="Create Question" />
+        </form>
+<div class="footer">
+    <a href=" {% url 'polls:last_question_view' %} ">List of questions</a
+</div>
 
 {% endblock %}
