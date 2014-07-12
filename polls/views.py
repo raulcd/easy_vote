@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
@@ -68,9 +68,9 @@ def create_poll(request):
             return HttpResponseRedirect(reverse('polls:create_choices',
                                                 args=(q.id,)))
         else:
-           return render(request, 'polls/index.html', {
-                'error_message': 'The question cannot be empty.',
-                })
+            return render(request, 'polls/index.html', {
+                          'error_message': 'The question cannot be empty.', })
+
 
 def create_choices(request, question_id):
     if not request.POST:
