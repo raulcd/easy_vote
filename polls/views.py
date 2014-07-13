@@ -84,7 +84,7 @@ def create_choices(request, question_id):
                                 votes=0)
             q.choice_set.create(choice_text=request.POST['answer_text_2'],
                                 votes=0)
-            return HttpResponseRedirect(reverse('polls:last_question_view',))
+            return HttpResponseRedirect(reverse('polls:detail', args=(q.id,)))
 
         else:
             return render(request, 'polls/create_question.html',
